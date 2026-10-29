@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CURSOS } from '../dados.js';
 
-const WHATSAPP_URL = import.meta.env.VITE_WHATSAPP_COMMUNITY_URL || 'https://chat.whatsapp.com/KAScey54v0uFXJ9WS3jt5g?s=cl&p=a&mlu=4&ilr=4&iam=2';
+const WHATSAPP_URL = import.meta.env.VITE_WHATSAPP_COMMUNITY_URL || 'https://chat.whatsapp.com/E1IorlIMs6lF2jipsT9Cwr?s=cl&p=a&mlu=4&ilr=4&iam=2';
 // Endereço que recebe os dados do formulário (Google Apps Script -> Google Planilhas). Veja docs/google-apps-script.gs
 const FORM_ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT || '';
 const DOMAINS = (import.meta.env.VITE_ALLOWED_EMAIL_DOMAINS || '')
