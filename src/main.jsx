@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Home from './pages/Home.jsx';
 import Join from './pages/Join.jsx';
+import Desafios from './pages/Desafios.jsx';
 import './styles.css';
 
 function ScrollTop() {
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')).render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/participar" element={<Join />} />
+      <Route path="/desafios" element={<Desafios />} />
     </Routes>
   </BrowserRouter>
 );

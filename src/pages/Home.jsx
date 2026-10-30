@@ -25,6 +25,9 @@ const SECOES = [
 const ATIVIDADES = ['Aula de Git e GitHub', 'Aula de lógica de programação', 'Maratona de programação', 'Projeto em equipe no portfólio', 'Apresentação de projeto em evento', 'Competição externa representando a escola'];
 
 export default function Home() {
+  // deixa o som dos desafios no cache para tocar no mesmo instante em que a nova aba abrir
+  useEffect(() => { const a = new Audio('/audio/carregamento.mp3'); a.preload = 'auto'; a.load(); }, []);
+
   const hero = useRef(null);
   const [aba, setAba] = useState(0);
   const [sel, setSel] = useState([]);
@@ -111,6 +114,7 @@ export default function Home() {
           <div className="cta">
             <Link className="btn" to="/participar">Quero participar</Link>
             <a className="btn ghost" href="#clube">Conhecer o clube</a>
+            <a className="btn bl" href="/desafios" target="_blank" rel="noopener noreferrer">Desafios de lógica ↗</a>
           </div>
         </div>
       </header>
@@ -274,6 +278,7 @@ export default function Home() {
             </div>
             <div className="join-cta">
               <Link className="btn" to="/participar">Quero participar</Link>
+              <a className="btn bl" href="/desafios" target="_blank" rel="noopener noreferrer">Desafios de lógica ↗</a>
               <a className="btn ghost" href="/documentos/ClubeDS-Documento-Oficial.pdf" target="_blank" rel="noopener noreferrer">Documento oficial (PDF)</a>
             </div>
           </div>

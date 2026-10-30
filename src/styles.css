@@ -17,6 +17,8 @@ p{margin:0}
 .topbar .lg b:first-child{color:var(--or)}.topbar .lg b:last-child{color:var(--bl)}
 .btn{display:inline-block;font:700 15px var(--h);padding:12px 22px;border-radius:12px;background:var(--or);color:#140800;border:0;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -8px var(--or)}
+.btn.bl{background:var(--bl);color:#fff}
+.btn.bl:hover{box-shadow:0 10px 30px -8px var(--bl)}
 .btn.ghost{background:transparent;color:var(--tx);border:1px solid var(--line)}
 .btn.ghost:hover{border-color:var(--bl);box-shadow:0 10px 30px -10px var(--bl)}
 /* hero */
