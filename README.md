@@ -20,4 +20,5 @@ Os botões "Desafios de lógica" da home abrem `/desafios` em uma nova aba. Flux
 - Falas do Buddy: `src/desafios/falas.js` (marque `perto`/`animado` para mudar o comportamento dele).
 - Imagens: `public/buddy/` (expressões) e `public/buddy/voando/` (23 frames do voo).
 - Sons: `public/audio/carregamento.mp3` (toca durante o carregamento) e `public/audio/tema.mp3` (loop até sair da página). Lógica em `src/desafios/audio.js`.
+- A página abre com um botão de play (`public/buddy/play.webp`): o clique nele inicia o carregamento e libera o áudio no navegador.
 - Jogos: `src/desafios/Padrao.jsx`, `Numero.jsx`, `Fila.jsx`. A pontuação e as estrelas ficam salvas só no navegador (localStorage). Ranking compartilhado exigiria um banco (ex.: Supabase).

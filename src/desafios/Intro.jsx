@@ -9,7 +9,7 @@ const ULTIMA = FALAS.length - 1;
 
 export default function Intro({ direto = false, onEscolher }) {
   const reduz = reduzMovimento();
-  const [fase, setFase] = useState(direto || reduz ? 'fala' : 'carregando'); // carregando | chegando | transformando | fala
+  const [fase, setFase] = useState(direto ? 'fala' : 'inicio'); // inicio | carregando | chegando | transformando | fala
   const [prog, setProg] = useState(0);
   const [frame, setFrame] = useState(1);
   const [i, setI] = useState(direto ? ULTIMA : 0);
@@ -19,7 +19,8 @@ export default function Intro({ direto = false, onEscolher }) {
 
   // som: abertura enquanto o robô voa; tema em loop depois da tela de carregamento
   useEffect(() => {
-    if (fase === 'fala') tocarTema(); else tocarAbertura();
+    if (fase === 'fala') tocarTema();
+    else if (fase !== 'inicio') tocarAbertura();
   }, [fase]);
 
   // 1) carrega as imagens enquanto o robô passa voando
@@ -88,6 +89,13 @@ export default function Intro({ direto = false, onEscolher }) {
     return () => window.removeEventListener('keydown', tecla);
   }, [avancar]);
 
+  // o clique no botão de play é o gesto que libera o som no navegador
+  function comecar() {
+    if (reduz) { tocarTema(); setFase('fala'); return; }
+    tocarAbertura();
+    setFase('carregando');
+  }
+
   function pular() { setAviso(''); setI(ULTIMA); setN(FALAS[ULTIMA].t.length); setFase('fala'); }
 
   function escolher(nv) {
@@ -100,7 +108,16 @@ export default function Intro({ direto = false, onEscolher }) {
 
   return (
     <div className="intro">
-      {fase !== 'fala' || !direto ? (
+      {fase === 'inicio' && (
+        <div className="inicio">
+          <button type="button" className="play" onClick={comecar} aria-label="Começar os desafios de lógica">
+            <img src="/buddy/play.webp" alt="" draggable="false" />
+          </button>
+          <p>Clique para começar</p>
+        </div>
+      )}
+
+      {fase !== 'inicio' && (fase !== 'fala' || !direto) ? (
         <button type="button" className="pular" onClick={pular} hidden={fase === 'fala' && fimDasFalas}>Pular introdução ›</button>
       ) : null}
 
