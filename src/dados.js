@@ -37,3 +37,6 @@ export const LIDERES = [
 // Para adicionar, siga o modelo:
 // { nome: 'Nome do projeto', texto: 'Uma ou duas frases sobre o que ele resolve.', equipe: 'Nome do time (opcional)' }
 export const PROJETOS_HACKATHON = [];
+
+// Troque para true quando os Desafios de lógica puderem ser abertos ao público.
+export const DESAFIOS_LIBERADO = false;

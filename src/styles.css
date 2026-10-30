@@ -212,3 +212,11 @@ background:radial-gradient(420px circle at 0 0,rgba(255,106,0,.2),transparent 60
 .modal-box .sub{margin:0 0 8px;font-size:16px}
 .modal-box .btn{width:100%;text-align:center}
 .modal-box .okmark{margin-bottom:4px;background:#25d366;color:#04200e}
+
+/* aviso "Em breve" dos Desafios de lógica */
+.breve-bg{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(2,11,36,.8);backdrop-filter:blur(6px)}
+.breve-pg{min-height:100vh;display:grid;place-items:center;padding:20px}
+.breve{max-width:420px;width:100%;text-align:center;padding:36px 28px;border-radius:20px;background:var(--bg2);border:1px solid var(--line);box-shadow:0 30px 80px -30px var(--bl)}
+.breve-tag{display:inline-block;font:700 12px var(--h);letter-spacing:.14em;color:var(--bl);margin-bottom:10px}
+.breve h1,.breve h2{font:700 38px var(--h);margin:0 0 12px;color:var(--or)}
+.breve p{color:var(--mut);margin:0 0 24px;line-height:1.6}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CURSOS, PROFESSORES, LIDERES, PROJETOS_HACKATHON } from '../dados.js';
+import { CURSOS, PROFESSORES, LIDERES, PROJETOS_HACKATHON, DESAFIOS_LIBERADO } from '../dados.js';
 
 const AREAS = ['Web', 'Dados', 'Jogos', 'Mobile', 'Inteligência Artificial', 'Banco de dados', 'Segurança', 'Algoritmos', 'Robótica', 'Nuvem'];
 
@@ -26,7 +26,19 @@ const ATIVIDADES = ['Aula de Git e GitHub', 'Aula de lógica de programação', 
 
 export default function Home() {
   // deixa o som dos desafios no cache para tocar no mesmo instante em que a nova aba abrir
-  useEffect(() => { const a = new Audio('/audio/carregamento.mp3'); a.preload = 'auto'; a.load(); }, []);
+  useEffect(() => { if (!DESAFIOS_LIBERADO) return; const a = new Audio('/audio/carregamento.mp3'); a.preload = 'auto'; a.load(); }, []);
+
+  // enquanto os desafios não são liberados, o botão só mostra o aviso "Em breve"
+  const [breve, setBreve] = useState(false);
+  useEffect(() => {
+    if (!breve) return;
+    const fechar = (e) => { if (e.key === 'Escape') setBreve(false); };
+    window.addEventListener('keydown', fechar);
+    return () => window.removeEventListener('keydown', fechar);
+  }, [breve]);
+  const botaoDesafios = DESAFIOS_LIBERADO
+    ? <a className="btn bl" href="/desafios" target="_blank" rel="noopener noreferrer">Desafios de lógica ↗</a>
+    : <button type="button" className="btn bl" onClick={() => setBreve(true)}>Desafios de lógica</button>;
 
   const hero = useRef(null);
   const [aba, setAba] = useState(0);
@@ -114,7 +126,7 @@ export default function Home() {
           <div className="cta">
             <Link className="btn" to="/participar">Quero participar</Link>
             <a className="btn ghost" href="#clube">Conhecer o clube</a>
-            <a className="btn bl" href="/desafios" target="_blank" rel="noopener noreferrer">Desafios de lógica ↗</a>
+            {botaoDesafios}
           </div>
         </div>
       </header>
@@ -278,7 +290,7 @@ export default function Home() {
             </div>
             <div className="join-cta">
               <Link className="btn" to="/participar">Quero participar</Link>
-              <a className="btn bl" href="/desafios" target="_blank" rel="noopener noreferrer">Desafios de lógica ↗</a>
+              {botaoDesafios}
               <a className="btn ghost" href="/documentos/ClubeDS-Documento-Oficial.pdf" target="_blank" rel="noopener noreferrer">Documento oficial (PDF)</a>
             </div>
           </div>
@@ -291,6 +303,16 @@ export default function Home() {
           <span>Clube de Programação · Escola Técnica SENAI CIMATEC</span>
         </div>
       </footer>
+      {breve && (
+        <div className="breve-bg" onClick={() => setBreve(false)}>
+          <div className="breve" role="dialog" aria-modal="true" aria-labelledby="breve-t" onClick={(e) => e.stopPropagation()}>
+            <span className="breve-tag">DESAFIOS DE LÓGICA</span>
+            <h2 id="breve-t">Em breve</h2>
+            <p>Estamos preparando os desafios. Em breve eles estarão disponíveis para todos.</p>
+            <button type="button" className="btn" autoFocus onClick={() => setBreve(false)}>Entendi</button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
