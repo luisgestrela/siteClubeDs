@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Moldura, Dica, FaseOk, Resultado, salvarEstrelas } from './comum.jsx';
+import { Moldura, Dica, FaseOk, Resultado, salvarEstrelas, aleatorio, semearFase } from './comum.jsx';
 
 const FASES = [
   { n: 4, meta: false, txt: 'Poucas barras e sem limite de movimentos. Ordene da menor para a maior, trocando só barras vizinhas.' },
@@ -11,11 +11,12 @@ const FASES = [
 const inversoes = (a) => { let c = 0; for (let x = 0; x < a.length; x++) for (let y = x + 1; y < a.length; y++) if (a[x] > a[y]) c++; return c; };
 const ordenado = (a) => a.every((v, k) => v === k + 1);
 
-function embaralhar(n) {
+function embaralhar(n, fase) {
+  semearFase('fila', fase);
   const minimo = Math.ceil((n * (n - 1)) / 4);
   for (;;) {
     const a = Array.from({ length: n }, (_, k) => k + 1);
-    for (let k = n - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
+    for (let k = n - 1; k > 0; k--) { const j = Math.floor(aleatorio() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
     if (!ordenado(a) && inversoes(a) >= minimo) return a;
   }
 }
@@ -87,7 +88,7 @@ const CONCEITO = {
 
 export default function Fila({ onSair }) {
   const [i, setI] = useState(0);
-  const [arr, setArr] = useState(() => embaralhar(FASES[0].n));
+  const [arr, setArr] = useState(() => embaralhar(FASES[0].n, 0));
   const [ini, setIni] = useState(arr);
   const [sel, setSel] = useState(null);
   const [moves, setMoves] = useState(0);
@@ -142,7 +143,7 @@ export default function Fila({ onSair }) {
     setArr(hist[hist.length - 1]); setHist((h) => h.slice(0, -1)); setMoves((m) => Math.max(0, m - 1)); setSel(null);
   }
   function novaFase(idx) {
-    const a = embaralhar(FASES[idx].n);
+    const a = embaralhar(FASES[idx].n, idx);
     setArr(a); setIni(a); setSel(null); setMoves(0); setHist([]); setDica(false); setOk(false);
   }
   function recomecar() { setArr(ini); setSel(null); setMoves(0); setHist([]); }

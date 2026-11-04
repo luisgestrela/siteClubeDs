@@ -1,4 +1,30 @@
+import { createContext, useContext, useEffect } from 'react';
 import Buddy from './Buddy.jsx';
+
+// ---- Modo duelo ----
+// Quando um duelo está em andamento, o componente Duelo fornece este contexto. Os jogos não precisam
+// saber nada sobre o duelo: Moldura e Resultado (abaixo) avisam o contexto o que está acontecendo.
+export const DueloCtx = createContext(null);
+
+// ---- Aleatoriedade controlada ----
+// No duelo os dois jogadores precisam receber exatamente os mesmos puzzles. Cada fase de cada jogo
+// recebe uma semente própria (semente do duelo + jogo + fase), então o resultado não depende de
+// quantas vezes cada jogador clicou, errou ou reiniciou. Fora do duelo (semente nula) é Math.random.
+let semente = null;
+let gerador = null;
+function mulberry32(a) {
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function hashTexto(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+export function definirSemente(s) { semente = s; gerador = null; }
+export function semearFase(jogo, fase) { gerador = semente == null ? null : mulberry32(hashTexto(`${semente}|${jogo}|${fase}`)); }
+export function soltarSemente() { gerador = null; }
+export const aleatorio = () => (gerador ? gerador() : Math.random());
 
 const CHAVE = 'clubeds:desafios:v1';
 
@@ -27,10 +53,14 @@ export function Estrelas({ n, max = 3, grande = false }) {
 }
 
 export function Moldura({ titulo, conceito, fase, total, pontos, onSair, children }) {
+  const duelo = useContext(DueloCtx);
+  useEffect(() => { if (duelo) duelo.progresso(pontos); }, [pontos]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <div className="jg">
       <div className="jg-top">
-        <button type="button" className="lnk" onClick={onSair}>← Jogos</button>
+        {duelo
+          ? <button type="button" className="lnk" onClick={duelo.abandonar}>✕ Abandonar</button>
+          : <button type="button" className="lnk" onClick={onSair}>← Jogos</button>}
         <div className="jg-tt"><h2>{titulo}</h2><span>{conceito}</span></div>
         <div className="jg-pts"><b>{pontos}</b> pts</div>
       </div>
@@ -69,6 +99,8 @@ export function FaseOk({ estrelas, pontos, ultima, onProxima, children, titulo =
 
 // Tela final: explica qual conceito de programação foi praticado
 export function Resultado({ pontos, estrelas, max, conceito, onRepetir, onSair }) {
+  const duelo = useContext(DueloCtx);
+  useEffect(() => { if (duelo) duelo.concluir({ pontos, estrelas, max }); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const razao = estrelas / max;
   return (
     <div className="res">
@@ -87,8 +119,14 @@ export function Resultado({ pontos, estrelas, max, conceito, onRepetir, onSair }
         {conceito.codigo && <pre aria-label="Exemplo em Python"><code>{conceito.codigo}</code></pre>}
       </div>
       <div className="res-b">
-        <button type="button" className="btn" onClick={onRepetir}>Jogar de novo</button>
-        <button type="button" className="btn ghost" onClick={onSair}>Voltar aos jogos</button>
+        {duelo ? (
+          <button type="button" className="btn" onClick={duelo.proximo} autoFocus>{duelo.ultimo ? 'Ver resultado do duelo →' : 'Próximo jogo →'}</button>
+        ) : (
+          <>
+            <button type="button" className="btn" onClick={onRepetir}>Jogar de novo</button>
+            <button type="button" className="btn ghost" onClick={onSair}>Voltar aos jogos</button>
+          </>
+        )}
       </div>
     </div>
   );

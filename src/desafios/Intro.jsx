@@ -7,7 +7,7 @@ import { tocarAbertura, tocarTema } from './audio.js';
 const TEMPO_MIN = 3400; // tempo mínimo da tela de carregamento (o robô passa voando)
 const ULTIMA = FALAS.length - 1;
 
-export default function Intro({ direto = false, onEscolher }) {
+export default function Intro({ direto = false, modoInicial = null, onEscolher }) {
   const reduz = reduzMovimento();
   const [fase, setFase] = useState(direto ? 'fala' : 'inicio'); // inicio | carregando | chegando | transformando | fala
   const [prog, setProg] = useState(0);
@@ -15,6 +15,7 @@ export default function Intro({ direto = false, onEscolher }) {
   const [i, setI] = useState(direto ? ULTIMA : 0);
   const [n, setN] = useState(direto ? FALAS[ULTIMA].t.length : 0);
   const [aviso, setAviso] = useState('');
+  const [modo, setModo] = useState(modoInicial); // null | solo | duelo
   const real = useRef(0);
 
   // som: abertura enquanto o robô voa; tema em loop depois da tela de carregamento
@@ -99,7 +100,7 @@ export default function Intro({ direto = false, onEscolher }) {
   function pular() { setAviso(''); setI(ULTIMA); setN(FALAS[ULTIMA].t.length); setFase('fala'); }
 
   function escolher(nv) {
-    if (nv.pronto) { onEscolher(nv.id); return; }
+    if (nv.pronto) { onEscolher(nv.id, modo); return; }
     setAviso(`Opa! O nível ${nv.nome} ainda está sendo preparado por aqui. Que tal aquecer os circuitos no Fácil primeiro?`);
   }
 
@@ -153,15 +154,36 @@ export default function Intro({ direto = false, onEscolher }) {
           )}
           {aviso && <button type="button" className="btn ghost" onClick={() => setAviso('')}>Ok, entendi</button>}
 
-          {fimDasFalas && !aviso && (
-            <div className="niveis" role="group" aria-label="Escolha o nível">
-              {NIVEIS.map((nv) => (
-                <button key={nv.id} type="button" className={'nivel ' + nv.cor + (nv.pronto ? '' : ' trava')} onClick={() => escolher(nv)}>
-                  <b>{nv.nome}</b>
-                  <span>{nv.pronto ? nv.desc : 'Em breve'}</span>
-                </button>
-              ))}
+          {fimDasFalas && !aviso && !modo && (
+            <div className="modos" role="group" aria-label="Escolha como jogar">
+              <button type="button" className="modo solo" onClick={() => setModo('solo')}>
+                <i aria-hidden="true">🎮</i>
+                <b>Jogar sozinho</b>
+                <span>Treine no seu ritmo, peça dicas e colecione estrelas.</span>
+              </button>
+              <button type="button" className="modo duelo" onClick={() => setModo('duelo')}>
+                <i aria-hidden="true">⚔️</i>
+                <b>Duelo</b>
+                <span>Dois jogadores, os mesmos desafios. Vence quem fizer mais estrelas.</span>
+              </button>
             </div>
+          )}
+
+          {fimDasFalas && !aviso && modo && (
+            <>
+              <p className="modo-atual">
+                Modo: <b>{modo === 'duelo' ? '⚔️ Duelo' : '🎮 Sozinho'}</b>
+                <button type="button" className="lnk" onClick={() => setModo(null)}>trocar</button>
+              </p>
+              <div className="niveis" role="group" aria-label="Escolha o nível">
+                {NIVEIS.map((nv) => (
+                  <button key={nv.id} type="button" className={'nivel ' + nv.cor + (nv.pronto ? '' : ' trava')} onClick={() => escolher(nv)}>
+                    <b>{nv.nome}</b>
+                    <span>{nv.pronto ? nv.desc : 'Em breve'}</span>
+                  </button>
+                ))}
+              </div>
+            </>
           )}
         </div>
       )}

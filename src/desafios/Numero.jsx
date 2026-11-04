@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Moldura, Dica, FaseOk, Resultado, estrelasPorPenalidade, salvarEstrelas } from './comum.jsx';
+import { Moldura, Dica, FaseOk, Resultado, estrelasPorPenalidade, salvarEstrelas, aleatorio, semearFase, soltarSemente } from './comum.jsx';
 
 const FASES = [
   { n: 100, max: 10, txt: 'Descubra o número de 1 a 100 em até 10 tentativas.' },
@@ -7,7 +7,12 @@ const FASES = [
   { n: 1000, max: 10, txt: 'Agora é de 1 a 1000, com 10 tentativas. Você consegue?' },
 ];
 
-const sorteio = (n) => 1 + Math.floor(Math.random() * n);
+// No duelo a 1ª tentativa de cada fase tem o mesmo número para os dois. Em "Tentar de novo" o número
+// é realmente aleatório, senão quem perdeu a rodada já saberia a resposta.
+const sorteio = (n, fase, repetida = false) => {
+  if (repetida) soltarSemente(); else semearFase('numero', fase);
+  return 1 + Math.floor(aleatorio() * n);
+};
 const ideal = (n) => Math.floor(Math.log2(n)) + 1; // máximo de palpites da busca binária
 
 // palpites que a busca binária faria para achar `alvo`
@@ -33,7 +38,7 @@ const CONCEITO = {
 
 export default function Numero({ onSair }) {
   const [i, setI] = useState(0);
-  const [segredo, setSegredo] = useState(() => sorteio(FASES[0].n));
+  const [segredo, setSegredo] = useState(() => sorteio(FASES[0].n, 0));
   const [palpites, setPalpites] = useState([]); // {n, r: 'maior' | 'menor' | 'certo'}
   const [val, setVal] = useState('');
   const [msg, setMsg] = useState('');
@@ -76,8 +81,8 @@ export default function Numero({ onSair }) {
     }
   }
 
-  function novaRodada(idx) {
-    setSegredo(sorteio(FASES[idx].n)); setPalpites([]); setVal(''); setMsg(''); setDica(false); setEstado('jogando');
+  function novaRodada(idx, repetida = false) {
+    setSegredo(sorteio(FASES[idx].n, idx, repetida)); setPalpites([]); setVal(''); setMsg(''); setDica(false); setEstado('jogando');
   }
   function proxima() {
     if (i === FASES.length - 1) { setFim(true); return; }
@@ -150,7 +155,7 @@ export default function Numero({ onSair }) {
               <h3>Acabaram as tentativas!</h3>
               <p>O número era <b>{segredo}</b>. A busca binária o acharia em {seqIdeal.length} {seqIdeal.length === 1 ? 'palpite' : 'palpites'}: {seqIdeal.join(' → ')}.</p>
               <p>Dica de ouro: chute sempre o número do meio do intervalo possível.</p>
-              <button type="button" className="btn" onClick={() => novaRodada(i)} autoFocus>Tentar de novo</button>
+              <button type="button" className="btn" onClick={() => novaRodada(i, true)} autoFocus>Tentar de novo</button>
             </div>
           )}
         </div>

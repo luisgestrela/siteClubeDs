@@ -39,4 +39,5 @@ export const LIDERES = [
 export const PROJETOS_HACKATHON = [];
 
 // Troque para true quando os Desafios de lógica puderem ser abertos ao público.
-export const DESAFIOS_LIBERADO = false;
+// export const DESAFIOS_LIBERADO = false; // (aviso "Em breve" ativo: botão só mostra o aviso)
+export const DESAFIOS_LIBERADO = true;

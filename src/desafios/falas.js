@@ -12,6 +12,7 @@ export const FALAS = [
   { t: 'E o Difícil... Bom, esse é para quem realmente gosta de um desafio!' },
   { t: 'E o melhor? Você escolhe por onde começar!' },
   { t: 'Mas não se engane! Até os desafios mais simples podem te surpreender!' },
+  { t: 'E se quiser mais emoção, chame um amigo para um duelo! Mesmos desafios para os dois, e vence quem fizer mais estrelas!' },
   { t: 'AAAAAH! Só de pensar já fico com os circuitos a mil!', animado: true },
   { t: 'Eu quero ver até onde você consegue chegar!', animado: true },
   { t: 'Então chega de conversa! Os desafios estão esperando!', animado: true },
@@ -19,6 +20,6 @@ export const FALAS = [
 
 export const NIVEIS = [
   { id: 'facil', nome: 'Fácil', desc: 'Aquecendo os circuitos', cor: 'bl', pronto: true },
-  { id: 'medio', nome: 'Médio', desc: 'Para quebrar a cabeça', cor: 'or', pronto: false },
-  { id: 'dificil', nome: 'Difícil', desc: 'Só para quem gosta de desafio', cor: 'rs', pronto: false },
+  { id: 'medio', nome: 'Médio', desc: 'Para quebrar a cabeça', cor: 'or', pronto: true },
+  { id: 'dificil', nome: 'Difícil', desc: 'Só para quem gosta de desafio', cor: 'rs', pronto: true },
 ];
