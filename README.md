@@ -15,6 +15,14 @@ Professores: edite `src/dados.js` (nome, cargo, areas e foto em `public/professo
 
 Equipe e hackathon: em `src/dados.js`, troque os nomes do presidente e do vice em `LIDERES` e, quando quiser, liste os projetos do Power Tech Hackathon em `PROJETOS_HACKATHON` (a grade so aparece quando a lista tem itens). As fotos ficam em `public/equipe/`.
 
+## Jornal Conecta TI
+O link do jornal e o e-mail que recebe as sugestões ficam em `src/dados.js` (`JORNAL_URL` e `JORNAL_EMAIL`). Ele aparece em 4 lugares da home: aviso "NOVO" no topo, botão "Conecta TI" ao lado dos outros (topo e final), seção própria (`#jornal`, com a capa de jornal) e link no rodapé. Todos abrem em nova aba.
+
+Sugerir pauta: o botão da seção `#jornal` abre um formulário (`src/componentes/SugerirPauta.jsx`) que envia a ideia por e-mail. Para ativar o envio automático, siga `docs/google-apps-script-pauta.gs` e coloque a URL gerada em `VITE_PAUTA_ENDPOINT` (no `.env` e na Vercel). Sem ela, o botão abre o app de e-mail da pessoa com a mensagem pronta.
+
+## Botões
+Estilo "tecla" (borda colorida, fonte mono JetBrains Mono, base grossa que afunda ao clicar), definido em `.btn` no `src/styles.css`. Variações: padrão (laranja), `.bl` (azul), `.ghost` (contorno azul), `.news` (claro, do jornal), `.wa` (WhatsApp). Extras: `.go` (seta →) e `.dn` (seta ↓).
+
 ## Desafios de lógica (`/desafios`)
 Os botões "Desafios de lógica" da home abrem `/desafios` em uma nova aba. Fluxo: tela de carregamento (robô voando) -> Buddy chega e conversa -> escolha do nível. Prontos: nível **Fácil** (Decifre o Padrão, Adivinhe o Número, Ordene a Fila) e nível **Médio** (Lâmpadas Apagadas, Caça ao Bug, Robô no Labirinto). Nível **Difícil**: Torre de Hanói e Portas Lógicas. Os três níveis estão liberados.
 - Liberação: `DESAFIOS_LIBERADO` em `src/dados.js` (true = botão abre os desafios; false = mostra o aviso "Em breve").

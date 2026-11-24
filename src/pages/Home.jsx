@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CURSOS, PROFESSORES, LIDERES, PROJETOS_HACKATHON, DESAFIOS_LIBERADO } from '../dados.js';
+import { CURSOS, PROFESSORES, LIDERES, PROJETOS_HACKATHON, DESAFIOS_LIBERADO, JORNAL_URL } from '../dados.js';
+import SugerirPauta from '../componentes/SugerirPauta.jsx';
 
 const AREAS = ['Web', 'Dados', 'Jogos', 'Mobile', 'Inteligência Artificial', 'Banco de dados', 'Segurança', 'Algoritmos', 'Robótica', 'Nuvem'];
 
@@ -16,6 +17,7 @@ const SECOES = [
   { id: 'clube', nome: 'O clube' },
   { id: 'atividades', nome: 'Atividades' },
   { id: 'hackathon', nome: 'Hackathon' },
+  { id: 'jornal', nome: 'Jornal' },
   { id: 'professores', nome: 'Professores' },
   { id: 'curriculo', nome: 'Currículo' },
   { id: 'equipe', nome: 'Equipe' },
@@ -30,6 +32,7 @@ export default function Home() {
 
   // enquanto os desafios não são liberados, o botão só mostra o aviso "Em breve"
   const [breve, setBreve] = useState(false);
+  const [pauta, setPauta] = useState(false); // formulário "Sugerir uma pauta" do jornal
   useEffect(() => {
     if (!breve) return;
     const fechar = (e) => { if (e.key === 'Escape') setBreve(false); };
@@ -39,6 +42,14 @@ export default function Home() {
   const botaoDesafios = DESAFIOS_LIBERADO
     ? <a className="btn bl" href="/desafios" target="_blank" rel="noopener noreferrer">Desafios de lógica ↗</a>
     : <button type="button" className="btn bl" onClick={() => setBreve(true)}>Desafios de lógica</button>;
+
+  // botao que leva ao jornal Conecta TI (abre em nova aba)
+  const botaoJornal = (
+    <a className="btn news" href={JORNAL_URL} target="_blank" rel="noopener noreferrer">
+      <svg className="ic" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 5h13a1 1 0 0 1 1 1v13H6a2 2 0 0 1-2-2V5z" /><path d="M18 9h2v8a2 2 0 0 1-2 2" /><path d="M8 9h6M8 13h6M8 16h3" /></svg>
+      Conecta TI ↗
+    </a>
+  );
 
   const hero = useRef(null);
   const [aba, setAba] = useState(0);
@@ -117,6 +128,9 @@ export default function Home() {
 
       <header className="hero" id="topo" ref={hero} onPointerMove={brilho}>
         <div className="wrap">
+          <a className="news-pill" href={JORNAL_URL} target="_blank" rel="noopener noreferrer">
+            <span className="nw">NOVO</span><span>Jornal <b>Conecta TI</b> no ar ↗</span>
+          </a>
           <div className="tag">CLUBE</div>
           <div className="mark" aria-label="Clube D/S">
             <i className="c1">{'<'}</i><i className="d">D</i><i className="sl">/</i><i className="s">S</i><i className="c2">{'>'}</i>
@@ -124,9 +138,10 @@ export default function Home() {
           <h1>Programação na prática, junto com a sua turma.</h1>
           <p className="lead">O clube de programação da Escola Técnica SENAI CIMATEC. Uma iniciativa estudantil que complementa a sua formação técnica com aulas mentoreadas, competições e projetos reais, sempre de alunos para alunos.</p>
           <div className="cta">
-            <Link className="btn" to="/participar">Quero participar</Link>
-            <a className="btn ghost" href="#clube">Conhecer o clube</a>
+            <Link className="btn go" to="/participar">Quero participar</Link>
+            <a className="btn ghost dn" href="#clube">Conhecer o clube</a>
             {botaoDesafios}
+            {botaoJornal}
           </div>
         </div>
       </header>
@@ -198,6 +213,35 @@ export default function Home() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      <section id="jornal" style={{ background: 'var(--bg2)', borderBlock: '1px solid var(--line)' }}>
+        <div className="wrap jornal">
+          <div className="rv">
+            <div className="jn-tag">{'// NEWSLETTER DO CLUBE'}</div>
+            <h2>Conecta <span className="o">TI</span></h2>
+            <p className="sub">O jornal feito pelo ClubeDS junto com a Coordenação. As edições ficam online para ler, compartilhar com a turma e baixar em PDF.</p>
+            <ul className="jn-feats">
+              <li>Edições online</li><li>Compartilhar</li><li>Gerar PDF</li><li>Acessível</li>
+            </ul>
+            <div className="jn-acts">
+              <a className="btn news" href={JORNAL_URL} target="_blank" rel="noopener noreferrer">Ler o jornal ↗</a>
+              <button type="button" className="btn ghost" onClick={() => setPauta(true)}>Sugerir uma pauta</button>
+            </div>
+          </div>
+          <div className="paper-w rv">
+            <a className="paper" href={JORNAL_URL} target="_blank" rel="noopener noreferrer" aria-label="Abrir o jornal Conecta TI em uma nova aba">
+              <div className="mast" aria-hidden="true">CONECTA<i> TI</i></div>
+              <div className="meta" aria-hidden="true"><span>NEWSLETTER</span><span>CLUBEDS + COORDENAÇÃO</span></div>
+              <div className="cols" aria-hidden="true">
+                <div><span className="ln h" /><span className="ln h2" /><span className="ln" /><span className="ln" /><span className="ln s" /></div>
+                <div className="pic">{'</>'}</div>
+              </div>
+              <div aria-hidden="true"><span className="ln w" /><span className="ln" /><span className="ln s" /></div>
+              <span className="stamp" aria-hidden="true">LEIA ONLINE ↗</span>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -289,8 +333,9 @@ export default function Home() {
               ))}
             </div>
             <div className="join-cta">
-              <Link className="btn" to="/participar">Quero participar</Link>
+              <Link className="btn go" to="/participar">Quero participar</Link>
               {botaoDesafios}
+              {botaoJornal}
               <a className="btn ghost" href="/documentos/ClubeDS-Documento-Oficial.pdf" target="_blank" rel="noopener noreferrer">Documento oficial (PDF)</a>
             </div>
           </div>
@@ -301,8 +346,10 @@ export default function Home() {
         <div className="wrap">
           <span><b style={{ color: 'var(--or)' }}>{'<D'}</b>/<b style={{ color: 'var(--bl)' }}>{'S>'}</b> Clube D/S</span>
           <span>Clube de Programação · Escola Técnica SENAI CIMATEC</span>
+          <a href={JORNAL_URL} target="_blank" rel="noopener noreferrer">Jornal Conecta TI ↗</a>
         </div>
       </footer>
+      {pauta && <SugerirPauta onFechar={() => setPauta(false)} />}
       {breve && (
         <div className="breve-bg" onClick={() => setBreve(false)}>
           <div className="breve" role="dialog" aria-modal="true" aria-labelledby="breve-t" onClick={(e) => e.stopPropagation()}>

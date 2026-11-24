@@ -41,3 +41,8 @@ export const PROJETOS_HACKATHON = [];
 // Troque para true quando os Desafios de lógica puderem ser abertos ao público.
 // export const DESAFIOS_LIBERADO = false; // (aviso "Em breve" ativo: botão só mostra o aviso)
 export const DESAFIOS_LIBERADO = true;
+
+// Jornal / newsletter do clube (abre em nova aba). Para trocar o link, edite aqui.
+export const JORNAL_URL = 'https://conecta-ti-bvgu.vercel.app';
+// E-mail para sugestões de pauta (aparece na seção do jornal)
+export const JORNAL_EMAIL = 'ds.clube00@gmail.com';
